@@ -1,0 +1,93 @@
+body {
+  font-family: "Arial", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  margin: 20px 0;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+div {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+div > div {
+  margin-top: 20px;
+}
+
+h2 {
+  color: #333;
+}
+
+p {
+  margin: 5px 0;
+}
+
+hr {
+  border: 0.5px solid #ddd;
+  margin: 10px 0;
+}
+
+/* Style for the book card container */
+.book-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin: 20px;
+}
+
+/* Style for each individual book card */
+.book-card {
+  width: calc(25% - 20px); /* Adjust the width as needed */
+  margin: 10px; /* Adjust margin as needed */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* Hover effect for the book card */
+.book-card:hover {
+  transform: scale(1.05);
+}
+
+/* Style for the book cover image */
+.book-card img {
+  width: 100%;
+  height: auto;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Style for the book information */
+.book-info {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Style for the book title */
+.book-info h2 {
+  font-size: 1.2em;
+  margin-bottom: 5px;
+}
+
+/* Style for the author and description */
+.book-info p {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Adjust the number of lines to show */
+  -webkit-box-orient: vertical;
+}

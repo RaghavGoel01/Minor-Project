@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Suggestions</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+        padding: 0 20px; /* Adjust the padding to add space on both sides */
+      }
+
+      h2 {
+        color: #333;
+      }
+
+      p {
+        margin: 5px 0;
+      }
+
+      hr {
+        border: 0.5px solid #ddd;
+        margin: 10px 0;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button {
+        background-color: #4caf50; /* Green background color */
+        color: white; /* White text color */
+        padding: 10px 20px; /* Padding around the text */
+        font-size: 16px; /* Font size */
+        border: none; /* Remove border */
+        border-radius: 4px; /* Add some border-radius for a rounded look */
+        cursor: pointer; /* Add a pointer cursor on hover */
+      }
+
+      button:hover {
+        background-color: #45a049; /* Darker green background color on hover */
+      }
+
+      .movie-cards-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin: 20px -10px; /* Negative margin to counteract the padding on the container */
+      }
+
+      .movie-card {
+        box-sizing: border-box;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin: 10px;
+        padding: 15px;
+        width: calc(25% - 20px); /* 25% width with margins on both sides */
+        text-align: center;
+      }
+
+      .movie-card:hover {
+        transform: scale(1.05);
+      }
+
+      .movie-card img {
+        width: 100%;
+        border-radius: 4px;
+        margin-top: 10px;
+      }
+
+      .no-results {
+        font-size: 18px;
+        color: #555;
+        text-align: center;
+        margin: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Movie Suggestions Based on Emotion</h1>
+      <input
+        type="text"
+        id="emotionInput"
+        placeholder="Enter emotion (e.g., happy, sad)"
+      />
+      <button onclick="fetchMovieSuggestions()">Get Movie Suggestions</button>
+      <div id="movieSuggestions" class="movie-cards-container"></div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Function to fetch movie suggestions based on emotion
+        window.fetchMovieSuggestions = async () => {
+          const omdbApiKey = "b80dcdff"; // Replace with your actual OMDb API key
+          const emotionInput = document.getElementById("emotionInput").value;
+
+          const apiUrl = `https://www.omdbapi.com/?s=${emotionInput}&apikey=${omdbApiKey}`;
+
+          try {
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+
+            // Display movie suggestions
+            displayMovieSuggestions(data.Search || []);
+          } catch (error) {
+            console.error("Error:", error);
+          }
+        };
+
+        // Function to display movie suggestions
+        const displayMovieSuggestions = (movieItems) => {
+          const movieSuggestionsElement =
+            document.getElementById("movieSuggestions");
+          movieSuggestionsElement.innerHTML = "";
+
+          if (movieItems && movieItems.length > 0) {
+            movieItems.forEach((item) => {
+              const movieCard = document.createElement("div");
+              movieCard.classList.add("movie-card");
+
+              const movieTitle = document.createElement("h2");
+              const movieLink = document.createElement("a");
+              movieLink.href = `https://www.imdb.com/title/${item.imdbID}/`; // IMDb link
+              movieLink.target = "_blank";
+              movieLink.textContent = item.Title;
+
+              const yearInfo = document.createElement("p");
+              yearInfo.textContent = `Year: ${item.Year}`;
+
+              const typeInfo = document.createElement("p");
+              typeInfo.textContent = `Type: ${item.Type}`;
+
+              const imgMov = document.createElement("img");
+              imgMov.src = item.Poster;
+              imgMov.alt = "Img.jpg";
+
+              movieTitle.appendChild(movieLink);
+              movieCard.appendChild(movieTitle);
+              movieCard.appendChild(yearInfo);
+              movieCard.appendChild(typeInfo);
+              movieCard.appendChild(imgMov);
+
+              movieSuggestionsElement.appendChild(movieCard);
+            });
+          } else {
+            const noResultsMessage = document.createElement("p");
+            noResultsMessage.textContent = "No movie suggestions found.";
+            noResultsMessage.classList.add("no-results");
+            movieSuggestionsElement.appendChild(noResultsMessage);
+          }
+        };
+      });
+    </script>
+  </body>
+</html>

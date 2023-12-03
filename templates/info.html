@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Include the Firebase SDK version 9 modular syntax -->
+
+    <!-- <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/51016.0/css/all.min.css"
+    /> -->
+
+    
+    <title>Vibify</title>
+    <meta content="" name="description" />
+    <meta content="" name="keywords" />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+      rel="stylesheet"
+    />
+
+    <!-- Vendor CSS Files -->
+    <link href="assets/vendor/aos/aos.css" rel="stylesheet" />
+    <link
+      href="assets/vendor/bootstrap/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="assets/vendor/bootstrap-icons/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" />
+    <link
+      href="assets/vendor/glightbox/css/glightbox.min.css"
+      rel="stylesheet"
+    />
+    <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet" />
+    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
+
+    <!-- Template Main CSS File -->
+    <link href="assets/css/style.css" rel="stylesheet" />
+
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f5f5;
+        
+       
+        margin: 0;
+       
+      }
+      #body-f {
+        margin-top: 100px;
+        padding-top: 100px;
+         margin-bottom: 100px;
+        padding-bottom: 20px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+        margin: 0;
+       
+      }
+
+      a{
+        color: black;
+      }
+
+      form {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 400px;
+        overflow-y: auto;
+        max-height: 80vh;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+
+      select {
+        appearance: none;
+      }
+
+      textarea {
+        height: 100px; /* Adjust the height as needed */
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        resize: vertical; /* Allow vertical resizing */
+      }
+
+      .fa {
+        margin-right: 10px;
+        color: #dce6ec;
+      }
+
+      button {
+        background-color: #3498db;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 18px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #292929;
+      }
+    </style>
+    <title>User Information Form</title>
+  </head>
+  <body>
+       <div >
+         <header id="header" class="fixed-top" style="background-color: #151515 !important;" >
+      <div class="container d-flex align-items-center">
+        <h1 class="logo me-auto"><a href="./index.html">Vibify</a></h1>
+
+        <nav id="navbar" class="navbar">
+          <ul>
+            <li ><a class="nav-link scrollto active" href="#hero" >Home</a></li>
+            <li><a class="nav-link scrollto" href="./index.html">About</a></li>
+            <li class="dropdown">
+              <a href="#"
+                ><span>Explore</span> <i class="bi bi-chevron-down"></i
+              ></a>
+              <ul>
+                <!-- <li><a href="#">Drop Down 1</a></li>
+                <li class="dropdown"> -->
+                  <!-- <a href="#"
+                    ><span>Deep Drop Down</span>
+                    <i class="bi bi-chevron-right"></i
+                  ></a> -->
+                  <!-- <ul>
+                    <li><a href="#">Deep Drop Down 1</a></li>
+                    <li><a href="#">Deep Drop Down 2</a></li>
+                    <li><a href="#">Deep Drop Down 3</a></li>
+                    <li><a href="#">Deep Drop Down 4</a></li>
+                    <li><a href="#">Deep Drop Down 5</a></li>
+                  </ul> -->
+                </li>
+                <li><a href="./music.html">Songs</a></li>
+                <li><a href="./youtube.html">Youtube</a></li>
+                <li><a href="./books.html">Books</a></li>
+                 <li><a href="./movie.html">Movies</a></li>
+              </ul>
+            </li>
+            <li><a class="nav-link scrollto" href="./index.html">Team</a></li>
+            <li><a class="nav-link scrollto" href="./index.html">Contact</a></li>
+            <li>
+              <a class="getstarted scrollto" href="./index.html">Get Started</a>
+            </li>
+          </ul>
+          <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+        <!-- .navbar -->
+      </div>
+    </header>
+       </div>
+    <div id="body-f">
+        <form id="userForm">
+      <label for="name"><i class="fas fa-user"></i> Name:</label>
+      <input type="text" id="name" name="name" required />
+
+      <label for="age"><i class="fas fa-birthday-cake"></i> Age:</label>
+      <input type="number" id="age" name="age" required />
+
+      <label for="location"
+        ><i class="fas fa-map-marker-alt"></i> Location:</label
+      >
+      <input type="text" id="location" name="location" required />
+
+      <label for="contentTaste"
+        ><i class="fas fa-film"></i> Taste in Content:</label
+      >
+      <select id="contentTaste" name="contentTaste" required>
+        <option value="action">Action</option>
+        <option value="drama">Drama</option>
+        <option value="comedy">Comedy</option>
+        <option value="fantasy">Fantasy</option>
+        <option value="science fiction">Science Fiction</option>
+      </select>
+
+      <label for="genres"
+        ><i class="fas fa-music"></i> Genres of Interest:</label
+      >
+      <select id="genres" name="genres" multiple required>
+        <option value="pop">Pop</option>
+        <option value="rock">Rock</option>
+        <option value="hip-hop">Hip Hop</option>
+        <option value="romance">Romance</option>
+        <!-- Add more genres as needed -->
+      </select>
+
+      <label for="creators"
+        ><i class="fas fa-star"></i> Favorite Creators:</label
+      >
+      <input
+        type="text"
+        id="creators"
+        name="creators"
+        placeholder="E.g., Favorite Authors, Artists, Directors"
+      />
+
+      <label for="language"
+        ><i class="fas fa-language"></i> Preferred Language:</label
+      >
+      <input type="text" id="language" name="language" required />
+
+      <label for="frequency"
+        ><i class="fas fa-clock"></i> Frequency of Content Consumption:</label
+      >
+      <select id="frequency" name="frequency" required>
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+      </select>
+
+      <label for="platform"
+        ><i class="fas fa-desktop"></i> Preferred Platform:</label
+      >
+      <input
+        type="text"
+        id="platform"
+        name="platform"
+        placeholder="E.g., Streaming services, Bookstores"
+      />
+
+      <label for="rating"
+        ><i class="fas fa-star-half-alt"></i> Rating Preferences:</label
+      >
+      <input
+        type="number"
+        id="rating"
+        name="rating"
+        min="1"
+        max="5"
+        placeholder="Enter a rating between 1 and 5"
+      />
+
+      <label for="device"
+        ><i class="fas fa-mobile-alt"></i> Preferred Device:</label
+      >
+      <select id="device" name="device" required>
+        <option value="smartphone">Smartphone</option>
+        <option value="tablet">Tablet</option>
+        <option value="computer">Computer</option>
+      </select>
+
+       <label for="song_pref"
+        > Your Top 5 Songs:</label
+      >
+      <textarea
+        id="song_pref"
+        name="song_pref"
+        placeholder="Add your top-5 songs"
+      ></textarea>
+
+      <label for="comments"
+        ><i class="fas fa-comments"></i> Comments/Feedback:</label
+      >
+      <textarea
+        id="comments"
+        name="comments"
+        placeholder="Any additional comments or feedback"
+      ></textarea>
+
+      <button type="submit" id="submitBtn">Submit</button>
+    </form>
+    </div>
+    <footer class="footer-copy" style="background-color: #9fb7fa">
+      <div class="container-fluid">
+        <div class="row">
+          <div
+            class="col-md-12"
+            style="display: flex; justify-content: center; align-items: center"
+          >
+            <p>
+              2023 &copy; Vibify
+              <!-- <a href="http://w3Template.com" target="_blank" rel="dofollow"
+                >W3 Template</a
+              > -->
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-analytics.js";
+      import {
+        getDatabase,
+        ref,
+        push,
+        set,
+      } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-database.js";
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCwKYC0yjme92FGAfYd7UCePyswu2aVGgQ",
+        authDomain: "data-67456.firebaseapp.com",
+        databaseURL: "https://data-67456-default-rtdb.firebaseio.com",
+        projectId: "data-67456",
+        storageBucket: "data-67456.appspot.com",
+        messagingSenderId: "654558226121",
+        appId: "1:654558226121:web:1a9eaae7be72dc8c1bcf18",
+        measurementId: "G-R5Z4N9MYXJ",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const db = getDatabase(app);
+
+      function submitForm() {
+        const name = document.getElementById("name").value;
+        const age = document.getElementById("age").value;
+        const location = document.getElementById("location").value;
+        const contentTaste = document.getElementById("contentTaste").value;
+        const genres = Array.from(
+          document.getElementById("genres").selectedOptions
+        ).map((option) => option.value);
+        const creators = document.getElementById("creators").value;
+        const language = document.getElementById("language").value;
+        const frequency = document.getElementById("frequency").value;
+        const platform = document.getElementById("platform").value;
+        const rating = document.getElementById("rating").value;
+        const device = document.getElementById("device").value;
+        const song_pref = document.getElementById("song_pref").value;
+        const comments = document.getElementById("comments").value;
+
+        // Create an object with the user data
+        const userData = {
+          name,
+          age,
+          location,
+          contentTaste,
+          genres,
+          creators,
+          language,
+          frequency,
+          platform,
+          rating,
+          device,
+          song_pref,
+          comments,
+        };
+
+        try {
+          // Generate a new unique key for each data entry
+          const newEntryRef = push(ref(db, "users"));
+
+          // Set the data under the unique key
+          set(newEntryRef, userData);
+
+          console.log("Document successfully added to the database!");
+        } catch (error) {
+          console.error("Error adding document: ", error);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .getElementById("submitBtn")
+          .addEventListener("click", submitForm);
+      });
+    </script>
+    
+  </body>
+</html>

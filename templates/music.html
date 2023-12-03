@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="static/styles/music.css" />
+    <title>Emotion-Based Music Recommendations</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Emotion-Based Music Recommendations</h1>
+      <label for="emotionInput">Enter an emotion:</label>
+      <input
+        type="text"
+        id="emotionInput"
+        placeholder="E.g., happy, sad, calm"
+      />
+      <button onclick="fetchSpotifyMusic()">Get Music Suggestions</button>
+      <div id="musicSuggestions" class="music-card-container"></div>
+    </div>
+    <script src="static/scripts/music.js"></script>
+  </body>
+</html>
