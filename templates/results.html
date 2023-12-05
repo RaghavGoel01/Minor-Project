@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Suggestions</title>
+</head>
+<body>
+
+<h1>Music Suggestions based on Emotion: {{ emotion }}</h1>
+
+<div id="musicSuggestions">
+    {% for suggestion in music_suggestions %}
+        <div class="music-card">
+            <h3>{{ suggestion.name }}</h3>
+
+            <!-- Display artists -->
+            <p>Artists: {{ suggestion.artists.items[0].profile.name }}</p>
+
+            <!-- Display album information -->
+            <p>Album: {{ suggestion.albumOfTrack.name }}</p>
+
+            <!-- Display cover art with a link to the album -->
+            <a href="{{ suggestion.albumOfTrack.sharingInfo.shareUrl }}" target="_blank">
+                <img src="{{ suggestion.albumOfTrack.coverArt.sources[0]?.url }}" alt="Album Cover" width="300" height="300">
+            </a>
+
+            <!-- Display Spotify URI and ID -->
+            <p>Spotify URI: {{ suggestion.uri }}</p>
+            <p>Spotify ID: {{ suggestion.id }}</p>
+
+            <!-- Display duration -->
+            <p>Duration: {{ suggestion.duration.totalMilliseconds }} milliseconds</p>
+
+            <!-- Display playability -->
+            <p>Playability: {% if suggestion.playability.playable %}Playable{% else %}Not Playable{% endif %}</p>
+        </div>
+    {% endfor %}
+</div>
+
+</body>
+</html>

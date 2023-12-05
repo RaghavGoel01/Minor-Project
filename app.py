@@ -5,7 +5,7 @@ import librosa
 import pickle
 import requests
 import matplotlib.pyplot as plt
-#from deepface import Deepface
+from deepface import DeepFace
 from flask import Flask, render_template, request, jsonify
 from flask_socketio import SocketIO, emit
 from keras.models import model_from_json
@@ -39,6 +39,7 @@ def load_audio_sentiment_model():
     return audio_sentiment_model
 
 #################################### PREPROCESSING ###################################################
+
 def zcr(data,frame_length,hop_length):
     zcr=librosa.feature.zero_crossing_rate(data,frame_length=frame_length,hop_length=hop_length)
     return np.squeeze(zcr)
@@ -97,6 +98,131 @@ def getJson(sent, predicted_proba):
         return {
             "error": "Not enough elements in predicted_proba_list"
         }
+####################################### API CALLS ####################################################
+
+##################################
+def fetch_spotify_music(emotion):
+    url = "https://spotify23.p.rapidapi.com/search/"
+    rapidapi_key = "4ad34a19c4msh29bdb34e9fa8279p186e67jsn27651f54f44e"  # Replace with your actual RapidAPI key
+    print("in fetch spotify music")
+    # Define a mapping of emotions to genres
+    emotion_genre_map = {
+        "neutral": "pop",
+        "sad": "blues",
+        "happy": "dance",
+        "angry": "rock",
+        "disgust": "metal",
+        "fear": "classical",
+        "surprise": "jazz",
+    }
+
+    # Get the corresponding genre for the emotion
+    
+    genre = emotion_genre_map.get(emotion, "pop")  # Default to "pop" if no mapping is found
+
+    headers = {
+        "X-RapidAPI-Key": rapidapi_key,
+        "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
+    }
+
+    params = {
+        "q": genre,  # Use the genre as the search parameter
+        "type": "multi",
+        "offset": 0,
+        "limit": 10,
+        "numberOfTopResults": 5,
+    }
+
+    # Make the request to the Spotify API
+    try:
+        print("making API call")
+        response = requests.get(url, headers=headers, params=params)
+        response.raise_for_status()  # Raise an exception for HTTP errors (4xx or 5xx)
+        data = response.json()
+        return data.get("tracks", {}).get("items", [])  # Extract the music items from the response
+    except requests.exceptions.RequestException as e:
+        print(f"Failed to fetch music from Spotify API: {e}")
+        return []
+
+####################################
+def fetch_youtube_videos(emotion):
+    try:
+        print("inside youtube fetch")
+        youtube_api_key = "AIzaSyCI0JXbE134VDasjshNPQo1e-3QQSm1mWE"
+        query = emotion
+        max_results = 10
+        api_url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q={query}&key={youtube_api_key}&maxResults={max_results}"
+
+        response = requests.get(api_url)
+        response.raise_for_status()  # Raise an exception for HTTP errors (4xx or 5xx)
+
+        data = response.json()
+        video_items = data.get("items", [])
+        filtered_video_ids = [
+            item["id"]["videoId"] for item in video_items
+            if "snippet" in item and "thumbnails" in item["snippet"]
+        ]
+
+        return filtered_video_ids
+    except Exception as e:
+        raise RuntimeError(f"Failed to fetch YouTube videos: {str(e)}")
+
+##########################################
+def fetch_movie_recommendations(emotion):
+    print("inside movie recommendations")
+    try:
+        omdb_api_key = "b80dcdff"
+        genre_mapping = {
+                "happy": "comedy",
+                "sad": "drama",
+                "angry": "action",
+                "disgust": "horror",
+                "fear": "thriller",
+                "surprise": "mystery",
+                "neutral": "documentary",
+                "excited": "adventure",
+                }
+        genre = genre_mapping.get(emotion.lower(), "movie")
+
+        api_url = f"https://www.omdbapi.com/?s={genre}&apikey={omdb_api_key}"
+
+        response = requests.get(api_url)
+        response.raise_for_status()
+
+        data = response.json()
+        movie_items = data.get("Search", [])
+        return movie_items
+    
+    except Exception as e:
+        raise RuntimeError(f"Failed to fetch Movie recommendations: {str(e)}")
+
+#########################################
+def fetch_books_recommendations(emotion):
+    print("inside book recommendations")
+    try:
+                api_key = "AIzaSyAxD4CT_JRUz3BP90ndDYN6HzSg44D95Go"
+                genre_mapping = {
+                    "happy": "fiction",
+                    "sad": "romance",
+                    "angry": "thriller",
+                    "neutral": "history",
+                    "disgust": "horror",
+                    "fear": "mystery",
+                    "surprise": "fantasy",
+                }
+                genre = genre_mapping.get(emotion.lower(), "fiction")
+
+                api_url = f"https://www.googleapis.com/books/v1/volumes?q={genre}&key={api_key}&maxResults=10"
+
+                response = requests.get(api_url)
+                response.raise_for_status()
+
+                data = response.json()
+                book_items = data.get("items", [])
+                return book_items
+    except Exception as e:
+        return jsonify({"error": str(e)})
+
 
 ####################################### ROUTES ####################################################
 
@@ -114,7 +240,17 @@ def home():
             try:
                 print("predicting emotion")
                 emotion = prediction(file_path, audio_sentiment_model)
-                return jsonify(emotion)
+                predicted_emotion = emotion["prominent_sentiment"]
+                music_suggestions = fetch_spotify_music(predicted_emotion)
+                #video_suggestions = fetch_youtube_videos(predicted_emotion)
+                movie_suggestions = fetch_movie_recommendations(predicted_emotion)
+                #book_suggestions = fetch_books_recommendations(predicted_emotion)
+                print("preparing to return template")
+                #print(music_suggestions)
+                #print(video_suggestions)
+                print(movie_suggestions)
+                #print(book_suggestions)
+                return render_template("results.html", emotion=emotion, music_suggestions=music_suggestions)
             except Exception as e:
                 return jsonify({"error": str(e)})
         
@@ -124,10 +260,28 @@ def home():
             filename = secure_filename(image_file.filename)
             file_path = os.path.join(images_upload_folder, filename)
             image_file.save(file_path)
+            try:
+                img = cv2.imread(file_path)
+                result = DeepFace.analyze(img, actions=['emotion'], enforce_detection=False)
+                predicted_emotion = str(max(zip(result[0]['emotion'].values(),
+					result[0]['emotion'].keys()))[1])
+                print(predicted_emotion)
 
-            
+                #music_suggestions = fetch_spotify_music(predicted_emotion)
+                #video_suggestions = fetch_youtube_videos(predicted_emotion)
+                # movie_suggestions = fetch_movie_recommendations(predicted_emotion)
+                # #book_suggestions = fetch_books_recommendations(predicted_emotion)
+                # print("preparing to return template")
+                # #print(music_suggestions)
+                # #print(video_suggestions)
+                # print(movie_suggestions)
+                # #print(book_suggestions)
+                # return render_template("results.html", emotion=emotion, music_suggestions=music_suggestions)
+            except Exception as e:
+                return jsonify({"error": str(e)})
+
     return jsonify({"error": "Invalid request"})
-    
+
 @app.route('/music', methods = ['GET'])
 def music():
     if request.method == "GET":
