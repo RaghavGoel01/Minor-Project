@@ -2,27 +2,58 @@ document.addEventListener("DOMContentLoaded", function () {
   const appElement = document.getElementById("app");
   const API_KEY = "AIzaSyAxD4CT_JRUz3BP90ndDYN6HzSg44D95Go";
 
+  // Define a mapping of emotions to book genres
+  const emotionGenreMap = {
+    happy: "fiction",
+    sad: "romance",
+    angry: "thriller",
+    neutral: "history",
+    disgust: "horror",
+    fear: "mystery",
+    surprise: "fantasy",
+  };
+
   function App() {
     const [query, setQuery] = React.useState("");
     const [books, setBooks] = React.useState([]);
 
     React.useEffect(() => {
       if (query) {
+        // Get the corresponding genre for the emotion
+        const genre = emotionGenreMap[query.toLowerCase()] || "fiction"; // Default to "fiction" if no mapping is found
+
         // Fetch books from the Google Books API
         fetch(
-          `https://www.googleapis.com/books/v1/volumes?q=${query}&key=${API_KEY}&maxResults=10`
+          `https://www.googleapis.com/books/v1/volumes?q=${genre}&key=${API_KEY}&maxResults=10`
         )
           .then((response) => response.json())
           .then((data) => {
             console.log("API Response:", data);
-            setBooks(data.items || []);
-            console.log("Rendering App with books:", books);
+            setBooks((prevBooks) => shuffle(data.items || []));
           })
           .catch((error) => {
             console.error("Error:", error);
           });
       }
     }, [query]);
+
+    // Function to shuffle an array
+    const shuffle = (array) => {
+      let currentIndex = array.length,
+        randomIndex;
+
+      while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        [array[currentIndex], array[randomIndex]] = [
+          array[randomIndex],
+          array[currentIndex],
+        ];
+      }
+
+      return array;
+    };
 
     return React.createElement(
       "div",
@@ -46,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
               "a",
               {
                 href: book.volumeInfo.infoLink,
-                target: "https://books.google.co.in/", // Open the link in a new tab
+                target: "_blank", // Open the link in a new tab
               },
               React.createElement("img", {
                 src:

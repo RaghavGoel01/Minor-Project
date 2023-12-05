@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -95,80 +94,95 @@
       }
     </style>
   </head>
-  <body>
-    <div class="container">
-      <h1>Movie Suggestions Based on Emotion</h1>
-      <input
-        type="text"
-        id="emotionInput"
-        placeholder="Enter emotion (e.g., happy, sad)"
-      />
-      <button onclick="fetchMovieSuggestions()">Get Movie Suggestions</button>
-      <div id="movieSuggestions" class="movie-cards-container"></div>
-    </div>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // Function to fetch movie suggestions based on emotion
-        window.fetchMovieSuggestions = async () => {
-          const omdbApiKey = "b80dcdff"; // Replace with your actual OMDb API key
-          const emotionInput = document.getElementById("emotionInput").value;
+<body>
+  <div class="container">
+    <h1>Movie Suggestions Based on Emotion</h1>
+    <input
+      type="text"
+      id="emotionInput"
+      placeholder="Enter emotion (e.g., happy, sad)"
+    />
+    <button onclick="fetchMovieSuggestions()">Get Movie Suggestions</button>
+    <div id="movieSuggestions" class="movie-cards-container"></div>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Emotions-to-genres mapping
+      const emotionsToGenres = {
+        happy: "comedy",
+        sad: "drama",
+        angry: "action",
+        disgust: "horror",
+        fear: "thriller",
+        surprise: "mystery",
+        neutral: "documentary",
+        excited: "adventure",
+      };
 
-          const apiUrl = `https://www.omdbapi.com/?s=${emotionInput}&apikey=${omdbApiKey}`;
+      // Function to fetch movie suggestions based on emotion
+      window.fetchMovieSuggestions = async () => {
+        const omdbApiKey = "b80dcdff";
+        const emotionInput = document
+          .getElementById("emotionInput")
+          .value.toLowerCase();
+        const genre = emotionsToGenres[emotionInput] || "movie"; // Default to "movie" if not found
 
-          try {
-            const response = await fetch(apiUrl);
-            const data = await response.json();
+        const apiUrl = `https://www.omdbapi.com/?s=${genre}&apikey=${omdbApiKey}`;
 
-            // Display movie suggestions
-            displayMovieSuggestions(data.Search || []);
-          } catch (error) {
-            console.error("Error:", error);
-          }
-        };
+        try {
+          const response = await fetch(apiUrl);
+          const data = await response.json();
 
-        // Function to display movie suggestions
-        const displayMovieSuggestions = (movieItems) => {
-          const movieSuggestionsElement =
-            document.getElementById("movieSuggestions");
-          movieSuggestionsElement.innerHTML = "";
+          // Display movie suggestions
+          displayMovieSuggestions(data.Search || []);
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      };
 
-          if (movieItems && movieItems.length > 0) {
-            movieItems.forEach((item) => {
-              const movieCard = document.createElement("div");
-              movieCard.classList.add("movie-card");
+      // Function to display movie suggestions
+      const displayMovieSuggestions = (movieItems) => {
+        const movieSuggestionsElement = document.getElementById("movieSuggestions");
+        movieSuggestionsElement.innerHTML = "";
 
-              const movieTitle = document.createElement("h2");
-              const movieLink = document.createElement("a");
-              movieLink.href = `https://www.imdb.com/title/${item.imdbID}/`; // IMDb link
-              movieLink.target = "_blank";
-              movieLink.textContent = item.Title;
+        if (movieItems && movieItems.length > 0) {
+          movieItems.forEach((item) => {
+            const movieCard = document.createElement("div");
+            movieCard.classList.add("movie-card");
 
-              const yearInfo = document.createElement("p");
-              yearInfo.textContent = `Year: ${item.Year}`;
+            const movieTitle = document.createElement("h2");
+            const movieLink = document.createElement("a");
+            movieLink.href = `https://www.imdb.com/title/${item.imdbID}/`; // IMDb link
+            movieLink.target = "_blank";
+            movieLink.textContent = item.Title;
 
-              const typeInfo = document.createElement("p");
-              typeInfo.textContent = `Type: ${item.Type}`;
+            const yearInfo = document.createElement("p");
+            yearInfo.textContent = `Year: ${item.Year}`;
 
-              const imgMov = document.createElement("img");
-              imgMov.src = item.Poster;
-              imgMov.alt = "Img.jpg";
+            const typeInfo = document.createElement("p");
+            typeInfo.textContent = `Type: ${item.Type}`;
 
-              movieTitle.appendChild(movieLink);
-              movieCard.appendChild(movieTitle);
-              movieCard.appendChild(yearInfo);
-              movieCard.appendChild(typeInfo);
-              movieCard.appendChild(imgMov);
+            const imgMov = document.createElement("img");
+            imgMov.src = item.Poster;
+            imgMov.alt = "Img.jpg";
 
-              movieSuggestionsElement.appendChild(movieCard);
-            });
-          } else {
-            const noResultsMessage = document.createElement("p");
-            noResultsMessage.textContent = "No movie suggestions found.";
-            noResultsMessage.classList.add("no-results");
-            movieSuggestionsElement.appendChild(noResultsMessage);
-          }
-        };
-      });
-    </script>
-  </body>
+            movieTitle.appendChild(movieLink);
+            movieCard.appendChild(movieTitle);
+            movieCard.appendChild(yearInfo);
+            movieCard.appendChild(typeInfo);
+            movieCard.appendChild(imgMov);
+
+            movieSuggestionsElement.appendChild(movieCard);
+          });
+        } else {
+          const noResultsMessage = document.createElement("p");
+          noResultsMessage.textContent = "No movie suggestions found.";
+          noResultsMessage.classList.add("no-results");
+          movieSuggestionsElement.appendChild(noResultsMessage);
+        }
+      };
+    });
+  </script>
+</body>
+
 </html>
