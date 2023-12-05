@@ -45,7 +45,7 @@ hr {
 }
 
 .music-video {
-  width: calc(50% - 20px); /* Adjust the width as needed for responsiveness */
+  width: calc(25% - 20px); /* Adjust the width for 4 videos in a line */
   margin: 10px;
   box-sizing: border-box;
 }
@@ -83,6 +83,6 @@ hr {
 
 @media screen and (max-width: 768px) {
   .music-video {
-    width: calc(100% - 20px);
+    width: calc(50% - 20px);
   }
 }

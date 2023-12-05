@@ -1,10 +1,26 @@
 document.addEventListener("DOMContentLoaded", async function () {
   const musicSuggestionsElement = document.getElementById("musicSuggestions");
 
+  // Define a mapping of emotions to genres
+  const emotionGenreMap = {
+    neutral: "pop",
+    sad: "blues",
+    happy: "dance",
+    angry: "rock",
+    disgust: "metal",
+    fear: "classical",
+    surprise: "jazz",
+  };
+
   window.fetchSpotifyMusic = async () => {
     const url = "https://spotify23.p.rapidapi.com/search/";
     const rapidApiKey = "4ad34a19c4msh29bdb34e9fa8279p186e67jsn27651f54f44e"; // Replace with your actual RapidAPI key
-    const emotionInput = document.getElementById("emotionInput").value;
+    const emotionInput = document
+      .getElementById("emotionInput")
+      .value.toLowerCase(); // Convert to lowercase for consistency
+
+    // Get the corresponding genre for the emotion
+    const genre = emotionGenreMap[emotionInput] || "pop"; // Default to "pop" if no mapping is found
 
     const options = {
       method: "GET",
@@ -16,7 +32,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     try {
       const queryParams = new URLSearchParams({
-        q: emotionInput,
+        q: genre, // Use the genre as the search parameter
         type: "multi",
         offset: 0,
         limit: 10,
