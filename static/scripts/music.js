@@ -81,19 +81,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         const albumInfo = document.createElement("p");
         albumInfo.textContent = `Album: ${albumName}`;
 
-        // const coverPhoto = item.data.albumOfTrack
-        //   ? item.data.albumOfTrack.coverArt.sources[0]?.url ||
-        //     "./assets/img/music1.jpg"
-        //   : "./assets/img/music1.jpg";
-
-        // const coverPhotoImg = document.createElement("img");
-        // coverPhotoImg.src = coverPhoto;
-        // coverPhotoImg.alt = "Album Cover";
-        // coverPhotoImg.width = 100; // Set the desired width
-        // coverPhotoImg.height = 100; // Set the desired height
-
-        // 123;
-
         const coverPhoto = item.data.albumOfTrack
           ? item.data.albumOfTrack.coverArt.sources[0]?.url ||
             "./assets/img/music1.jpg"
